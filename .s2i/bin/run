@@ -7,4 +7,4 @@
 #	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
 
-exec locust -f ./locustfile.py --port 8090 --host=http://localhost
+exec locust -f ./locustfile.py --port 8090 --host=$LOCUST_TARGET

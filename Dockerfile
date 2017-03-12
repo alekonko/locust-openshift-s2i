@@ -7,13 +7,13 @@ MAINTAINER Dennis Stritzke <dennis@stritzke.me>
 
 LABEL io.k8s.description="S2I for building Locust load testing server" \
       io.k8s.display-name="Locust" \
-      io.openshift.expose-services="8090:http" \
+      io.openshift.expose-services="8089:http" \
       io.openshift.tags="builder,locust"
 
 RUN yum install epel-release -y && \
     yum install python-pip python-devel -y && \
     yum clean all -y && \
-    pip install locustio zmq
+    pip install locustio==0.8a2 pyzmq==15.2.0
 
 COPY ./.s2i/bin/ /usr/libexec/s2i
 
@@ -22,6 +22,6 @@ RUN chown -R 1001:1001 /opt/app-root
 # This default user is created in the openshift/base-centos7 image
 USER 1001
 
-EXPOSE 8090
+EXPOSE 8089 5557 5558
 
 CMD ["usage"]

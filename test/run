@@ -29,7 +29,7 @@ cid_file=$($MKTEMP_EXEC -u --suffix=.cid)
 s2i_args="--pull-policy=never --loglevel=2"
 
 # Port the image exposes service to be tested
-test_port=8080
+test_port=8089
 
 image_exists() {
   docker inspect $1 &>/dev/null
@@ -40,15 +40,15 @@ container_exists() {
 }
 
 container_ip() {
-  if [ ! -z "$DOCKER_HOST" ] && [[ "$OSTYPE" =~ 'darwin' ]]; then
-    docker-machine ip
+  if [[ "$OSTYPE" =~ 'darwin' ]]; then
+    echo "localhost"
   else
     docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
   fi
 }
 
 container_port() {
-  if [ ! -z "$DOCKER_HOST" ] && [[ "$OSTYPE" =~ 'darwin' ]]; then
+  if [[ "$OSTYPE" =~ 'darwin' ]]; then
     docker inspect --format="{{(index .NetworkSettings.Ports \"$test_port/tcp\" 0).HostPort}}" "$(cat "${cid_file}")"
   else
     echo $test_port
